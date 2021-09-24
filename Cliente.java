@@ -1,42 +1,69 @@
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
- 
-public class Cliente {
- 
-    public static void main(String[] args) {
- 
-        //Host del servidor
-        final String HOST = "192.168.0.185";
-        //Puerto del servidor
-        final int PUERTO = 5000;
-        DataInputStream in;
-        DataOutputStream out;
- 
-        try {
-            //Creo el socket para conectarme con el cliente
-            Socket sc = new Socket(HOST, PUERTO);
- 
-            in = new DataInputStream(sc.getInputStream());
-            out = new DataOutputStream(sc.getOutputStream());
- 
-            //Envio un mensaje al cliente
-            out.writeUTF("¡Hola mundo desde el cliente!");
- 
-            //Recibo el mensaje del servidor
-            String mensaje = in.readUTF();
- 
-            System.out.println(mensaje);
- 
-            sc.close();
- 
-        } catch (IOException ex) {
-            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+import java.net.*;
+import java.io.*;
+  
+public class Cliente
+{
+    // initialize socket and input output streams
+    private Socket socket            = null;
+    private DataInputStream  input   = null;
+    private DataOutputStream out     = null;
+  
+    // constructor to put ip address and port
+    public Cliente(String address, int port)
+    {
+        // establish a connection
+        try
+        {
+            socket = new Socket(address, port);
+            System.out.println("Connected");
+  
+            // takes input from terminal
+            input  = new DataInputStream(System.in);
+  
+            // sends output to the socket
+            out    = new DataOutputStream(socket.getOutputStream());
         }
- 
+        catch(UnknownHostException u)
+        {
+            System.out.println(u);
+        }
+        catch(IOException i)
+        {
+            System.out.println(i);
+        }
+  
+        // string to read message from input
+        String line = "";
+  
+        // keep reading until "Over" is input
+        while (!line.equals("Over"))
+        {
+            try
+            {
+                line = input.readLine();
+                out.writeUTF(line);
+            }
+            catch(IOException i)
+            {
+                System.out.println(i);
+            }
+        }
+  
+        // close the connection
+        try
+        {
+            input.close();
+            out.close();
+            socket.close();
+        }
+        catch(IOException i)
+        {
+            System.out.println(i);
+        }
     }
- 
+  
+    public static void main(String args[])
+    {
+        Cliente client = new Cliente("192.168.0.185", 5000);
+    }
 }
