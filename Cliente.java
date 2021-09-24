@@ -14,14 +14,18 @@ public class Cliente
         // establish a connection
         try
         {
+            int n = 0;
+            while(n<25){
             socket = new Socket(address, port);
-            System.out.println("Connected");
+            System.out.println("Conexión " + n);
   
             // takes input from terminal
             input  = new DataInputStream(System.in);
   
             // sends output to the socket
             out    = new DataOutputStream(socket.getOutputStream());
+            n++;
+            }
         }
         catch(UnknownHostException u)
         {
