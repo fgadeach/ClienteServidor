@@ -68,6 +68,6 @@ public class Cliente
   
     public static void main(String args[])
     {
-        Cliente client = new Cliente("192.168.0.185", 5000);
+        Cliente client = new Cliente("192.168.85.128", 5000);
     }
 }
