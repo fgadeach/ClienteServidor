@@ -2,23 +2,12 @@ import socket
 import logging
 from datetime import datetime
 import hashlib
+
 tamanio = 1024
-
-
-
-
-
-
 formato = "utf-8"
-
 puerto = 8888
-
-ip = '192.168.220.128'
-
-
+ip = socket.gethostbyname(socket.gethostname())
 direccion = (ip, puerto)
-
-
 
 def main():
     dateTimeObj = datetime.now()
@@ -26,22 +15,16 @@ def main():
         filename=f"Logs/{dateTimeObj.year}-{dateTimeObj.month}-{dateTimeObj.day}-{dateTimeObj.hour}-{dateTimeObj.minute}-{dateTimeObj.second}.log", level=logging.INFO)
 
     cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-
     cliente.connect(direccion)
 
     data = cliente.recv(tamanio).decode('utf-8')
-
     item = data.split("_")
     nombreArch = item[0]
-
     tamanioArchivo = int(item[1])
     ID = item[2]
     connectionNumber = item[3]
     hashServidor = item[4]
-    
     ip = item[5]
-
     puerto = item[6]
 
     logging.info(
@@ -68,7 +51,6 @@ def main():
     tiempoTranferenciaF = datetime.now()
 
     tiempoTranferencia = tiempoTranferenciaF-tiempoTranferenciaI
-
   
     BUF_SIZE = 1024
 
@@ -82,7 +64,6 @@ def main():
             md5.update(data)
 
     hashCliente = md5.hexdigest()
-
    
     if(hashCliente == hashServidor):
         print(

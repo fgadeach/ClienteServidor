@@ -6,21 +6,10 @@ from datetime import datetime
 import hashlib
 tamanio = 1024
 
-
-
-
-
-
 formato = "utf-8"
-
 puerto = 8888
-
 ip = socket.gethostbyname(socket.gethostname())
-
-
 direccion = (ip, puerto)
-
-
 
 def manejarCliente(conn, addr, nombreArch, tamanioArchivo, ID, connectionNumber, hashServidor, ip, puerto):
     logging.info(f'Se genero la conexion {ID} desde {ip}:{puerto}')
@@ -31,10 +20,6 @@ def manejarCliente(conn, addr, nombreArch, tamanioArchivo, ID, connectionNumber,
     conn.send(data.encode(formato))
     mensaje = conn.recv(tamanio).decode(formato)
     print("Respuesta del cliente: " + mensaje)
-
-
-
-
 
     numPaquetesEnviados = 0
     tiempoTranferenciaI = datetime.now()
