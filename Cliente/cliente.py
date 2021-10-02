@@ -11,7 +11,7 @@ direccion = (ip, puerto)
 
 def main():
     dateTimeObj = datetime.now()
-    logging.basicConfig(filename='Logs/{dateTimeObj.year}-{dateTimeObj.month}-{dateTimeObj.day}-{dateTimeObj.hour}-{dateTimeObj.minute}-{dateTimeObj.second}.log', filemode='w', level=logging.DEBUG)
+    logging.basicConfig(filename=f'Logs/{dateTimeObj.year}-{dateTimeObj.month}-{dateTimeObj.day}-{dateTimeObj.hour}-{dateTimeObj.minute}-{dateTimeObj.second}.log', filemode='w', level=logging.DEBUG)
 
     cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     cliente.connect(direccion)
