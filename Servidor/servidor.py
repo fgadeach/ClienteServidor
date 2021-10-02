@@ -4,46 +4,60 @@ import os
 import logging
 from datetime import datetime
 import hashlib
-
-IP = socket.gethostbyname(socket.gethostname())
-PUERTO = 8888
-DIRECCION = (IP, PUERTO)
-TAMANIO = 1024
-FORMATO = "utf-8"
+tamanio = 1024
 
 
-def manejarCliente(conn, addr, NOM_ARCHIVO, TAM_ARCHIVO, ID, NUM_CONEXIONES, hashServidor, ip, puerto):
-    logging.info(f'Se conecto el cliente {ID} desde {ip}:{puerto}')
 
-    print("[+] Nueva conexion {addr}: conectado")
 
-    data = f"{NOM_ARCHIVO}_{TAM_ARCHIVO}_{ID}_{NUM_CONEXIONES}_{hashServidor}_{ip}_{puerto}"
-    conn.send(data.encode(FORMATO))
-    mensaje = conn.recv(TAMANIO).decode(FORMATO)
-    print("[-] El cliente responde: " + mensaje)
+
+
+formato = "utf-8"
+
+puerto = 8888
+
+ip = socket.gethostbyname(socket.gethostname())
+
+
+direccion = (ip, puerto)
+
+
+
+def manejarCliente(conn, addr, nombreArch, tamanioArchivo, ID, connectionNumber, hashServidor, ip, puerto):
+    logging.info(f'Se genero la conexion {ID} desde {ip}:{puerto}')
+
+    print(" Conexion del cliente {addr}: ready")
+
+    data = f"{nombreArch}_{tamanioArchivo}_{ID}_{connectionNumber}_{hashServidor}_{ip}_{puerto}"
+    conn.send(data.encode(formato))
+    mensaje = conn.recv(tamanio).decode(formato)
+    print("Respuesta del cliente: " + mensaje)
+
+
+
+
 
     numPaquetesEnviados = 0
     tiempoTranferenciaI = datetime.now()
-    with open(NOM_ARCHIVO, "r") as f:
+    with open(nombreArch, "r") as f:
         while True:
-            data = f.read(TAMANIO)
+            data = f.read(tamanio)
 
             if not data:
                 break
 
-            conn.send(data.encode(FORMATO))
-            mensaje = conn.recv(TAMANIO).decode(FORMATO)
+            conn.send(data.encode(formato))
+            mensaje = conn.recv(tamanio).decode(formato)
             numPaquetesEnviados += 1
     tiempoTranferenciaF = datetime.now()
 
     tiempoTranferencia = tiempoTranferenciaF-tiempoTranferenciaI
     logging.info(
-        f'El tiempo de transferencia del cliente {ID} fue de: {tiempoTranferencia}')
+        f'Tiempo de transferencia de cliente {ID} fue: {tiempoTranferencia}')
 
     logging.info(
-        f'El numero de paquetes enviado al cliente {ID} fue: {numPaquetesEnviados}')
+        f'Numero de paquetes enviados al cliente {ID} fueron: {numPaquetesEnviados}')
     logging.info(
-        f'El numero de bytes enviado al cliente {ID} fue: {numPaquetesEnviados*TAMANIO}')
+        f'Numero de bytes enviados al cliente {ID} fueron: {numPaquetesEnviados*tamanio}')
     conn.close()
 
 
@@ -54,34 +68,34 @@ def main():
 
     numValidoConexiones = False
     while(not numValidoConexiones):
-        numConexiones = input("Numero de conexiones (1-25):")
+        numConexiones = input("Ingrese numero de conexiones:")
         if(int(numConexiones) >= 1 and int(numConexiones) <= 25):
             numValidoConexiones = True
         else:
-            print(f"{numConexiones} no es un numero valido de conexiones")
+            print(f"{numConexiones} El numero de conexiones debe de estar entre 1 y 25")
 
-    NUM_CONEXIONES = int(numConexiones)
+    connectionNumber = int(numConexiones)
 
     archivoValido = False
     while(not archivoValido):
-        archivo = input("Escoja entre el archivo 1(100MB) o 2(250MB):")
+        archivo = input("Ingrese 1 para el archivo de 100MB o ingrese 2 para el archivo de 250MB:")
         if(int(archivo) == 2):
-            NOM_ARCHIVO = "ArchivosEnvio/250MB.txt"
-            TAM_ARCHIVO = os.path.getsize(NOM_ARCHIVO)
+            nombreArch = "ArchivosEnvio/250MB.txt"
+            tamanioArchivo = os.path.getsize(nombreArch)
             archivoValido = True
         elif(int(archivo) == 1):
-            NOM_ARCHIVO = "ArchivosEnvio/100MB.txt"
-            TAM_ARCHIVO = os.path.getsize(NOM_ARCHIVO)
+            nombreArch = "ArchivosEnvio/100MB.txt"
+            tamanioArchivo = os.path.getsize(nombreArch)
             archivoValido = True
         else:
-            print("El archivo escogido no es valido")
+            print("Archivo Invalido (Inputs debe ser 1 o 2)")
 
     ## HASHING ##
     BUF_SIZE = 1024
 
     md5 = hashlib.md5()
 
-    with open(NOM_ARCHIVO, 'rb') as f:
+    with open(nombreArch, 'rb') as f:
         while True:
             data = f.read(BUF_SIZE)
             if not data:
@@ -90,31 +104,31 @@ def main():
 
     hashServidor = md5.hexdigest()
 
-    ## HASHING ##
-
-    logging.info(f'El nombre del archivo envidado : {NOM_ARCHIVO}')
-    logging.info(f'El tamanio del archivo enviado es : {TAM_ARCHIVO}')
+    logging.info(f'Nombre del archivo enviado : {nombreArch}')
+    logging.info(f'Tamanio del archivo  : {tamanioArchivo}')
 
     servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    servidor.bind(DIRECCION)
+    servidor.bind(direccion)
     servidor.listen()
-    print("[+] Servidor escuchando ....")
+    print("Servidor en standby ....")
 
     threads = []
 
-    NUM_CLIENTES = 0
-    while (NUM_CLIENTES < NUM_CONEXIONES):
+    clientsNumber = 0
+
+    
+    while (clientsNumber < connectionNumber):
         conn, addr = servidor.accept()
-        NUM_CLIENTES += 1
-        print(f"[+] Cliente conectado desde {addr[0]}:{addr[1]}")
+        clientsNumber += 1
+        print(f"Conexion del cliente desde {addr[0]}:{addr[1]}")
         thread = threading.Thread(target=manejarCliente, args=(
-            conn, addr, NOM_ARCHIVO, TAM_ARCHIVO, NUM_CLIENTES, NUM_CONEXIONES, hashServidor, addr[0], {addr[1]}))
+            conn, addr, nombreArch, tamanioArchivo, clientsNumber, connectionNumber, hashServidor, addr[0], {addr[1]}))
         threads.append(thread)
-        print(f"[+] Threads activos: {threading.active_count()-1}")
-        print(f"[+] Clientes conectados: {NUM_CLIENTES}")
+        print(f" Hilos de ejecucion en este momento: {threading.active_count()-1}")
+        print(f"Conexion de clientes: {clientsNumber}")
 
     i = 0
-    while(i < NUM_CLIENTES):
+    while(i < clientsNumber):
         threads[i].start()
         i += 1
 

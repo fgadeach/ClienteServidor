@@ -2,12 +2,22 @@ import socket
 import logging
 from datetime import datetime
 import hashlib
+tamanio = 1024
 
-IP = socket.gethostbyname(socket.gethostname())
-PUERTO = 8888
-DIRECCION = (IP, PUERTO)
-TAMANIO = 1024
-FORMATO = "utf-8"
+
+
+
+
+
+formato = "utf-8"
+
+puerto = 8888
+
+ip = '192.168.220.128'
+
+
+direccion = (ip, puerto)
+
 
 
 def main():
@@ -16,49 +26,55 @@ def main():
         filename=f"Logs/{dateTimeObj.year}-{dateTimeObj.month}-{dateTimeObj.day}-{dateTimeObj.hour}-{dateTimeObj.minute}-{dateTimeObj.second}.log", level=logging.INFO)
 
     cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    cliente.connect(DIRECCION)
 
-    data = cliente.recv(TAMANIO).decode('utf-8')
+
+    cliente.connect(direccion)
+
+    data = cliente.recv(tamanio).decode('utf-8')
+
     item = data.split("_")
-    NOM_ARCHIVO = item[0]
-    TAM_ARCHIVO = int(item[1])
+    nombreArch = item[0]
+
+    tamanioArchivo = int(item[1])
     ID = item[2]
-    NUM_CONEXIONES = item[3]
+    connectionNumber = item[3]
     hashServidor = item[4]
+    
     ip = item[5]
+
     puerto = item[6]
 
     logging.info(
-        f"El nombre del archivo recivido es: {NOM_ARCHIVO} con un tamaño de {TAM_ARCHIVO}")
+        f"Se recibio el archivo : {nombreArch} con tamaño de {tamanioArchivo}")
 
     logging.info(
-        f"Este es el vliente {ID} conectado desde la siguiente direccion: {ip} : {puerto}")
+        f"El cliente {ID}  se encuentra con la direccion: {ip} : {puerto}")
 
-    print("[+] Nombre y tamanio del archivo recivido del servidor")
-    cliente.send("Nombre y tamanio del archivo recivido".encode(FORMATO))
+    print("\n Datos del archivo recibido")
+    cliente.send("Datos del archivo recibido".encode(formato))
 
-    numPaquetesRecividos = 0
+    numPaquetes = 0
     tiempoTranferenciaI = datetime.now()
-    with open(f"ArchivosRecibidos/{ID}-Prueba-{NUM_CONEXIONES}", "w") as f:
+    with open(f"ArchivosRecibidos/{ID}-Prueba-{connectionNumber}", "w") as f:
         while True:
-            data = cliente.recv(TAMANIO).decode(FORMATO)
+            data = cliente.recv(tamanio).decode(formato)
 
             if not data:
                 break
 
             f.write(data)
-            cliente.send("Archivo recivido".encode(FORMATO))
-            numPaquetesRecividos += 1
+            cliente.send("Archivo recibido".encode(formato))
+            numPaquetes += 1
     tiempoTranferenciaF = datetime.now()
 
     tiempoTranferencia = tiempoTranferenciaF-tiempoTranferenciaI
 
-    ## HASHING ##
+  
     BUF_SIZE = 1024
 
     md5 = hashlib.md5()
 
-    with open(f"ArchivosRecibidos/{ID}-Prueba-{NUM_CONEXIONES}", 'rb') as f:
+    with open(f"ArchivosRecibidos/{ID}-Prueba-{connectionNumber}", 'rb') as f:
         while True:
             data = f.read(BUF_SIZE)
             if not data:
@@ -67,22 +83,22 @@ def main():
 
     hashCliente = md5.hexdigest()
 
-    ## HASHING ##
+   
     if(hashCliente == hashServidor):
         print(
-            "[+] Se comparo los hashing del servidor y del cliente y el archivo llego correctamente")
-        cliente.send('ENVIO EXITOSO'.encode(FORMATO))
-        logging.info('La entrega del archivo fue ecxitosa')
+            "La llave privada concuerda con las dos partes")
+        cliente.send('PROTOCOLO CORRECTO'.encode(formato))
+        logging.info('Se entrego el archivo exitosamente')
     else:
-        print("[+] Se comparo los hashing del servidor y del cliente y el archivo NO llego correctamente")
-        cliente.send('ENVIO FALLIDO'.encode(FORMATO))
-        logging.info('La entrega del archivo NO fue ecxitosa')
+        print("Se comparo los hashing del servidor y del cliente y el archivo NO llego correctamente")
+        cliente.send('ERROR EN EL ENVIO'.encode(formato))
+        logging.info('No se pudo concluir la entrega del archivo')
 
-    logging.info(f'El tiempo de transferencia fue de: {tiempoTranferencia}')
+    logging.info(f'Tiempo de transferencia : {tiempoTranferencia}')
     logging.info(
-        f'El numero de paquetes recibidos fue: {numPaquetesRecividos}')
+        f'Numero de paquetes recibidos fue: {numPaquetes}')
     logging.info(
-        f"El numero de bytes recibidos fue: {numPaquetesRecividos*TAMANIO}")
+        f"Numero de bytes recibidos fue: {numPaquetes*tamanio}")
 
     cliente.close()
 
