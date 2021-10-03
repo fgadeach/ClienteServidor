@@ -55,7 +55,7 @@ def main():
 
     md5 = hashlib.md5()
 
-    with open(f"ArchivosRecibidos/{ID}-Prueba-{connectionNumber}", 'rb') as f:
+    with open(f"Cliente/ArchivosRecibidos/{ID}-Prueba-{connectionNumber}", 'rb') as f:
         while True:
             data = f.read(BUF_SIZE)
             if not data:
