@@ -8,7 +8,7 @@ tamanio = 1024
 
 formato = "utf-8"
 puerto = 8888
-ip = socket.gethostbyname(socket.gethostname())
+ip = '192.168.80.128'
 direccion = (ip, puerto)
 
 def manejarCliente(conn, addr, nombreArch, tamanioArchivo, ID, connectionNumber, hashServidor, ip, puerto):

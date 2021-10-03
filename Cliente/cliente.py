@@ -6,12 +6,12 @@ import hashlib
 tamanio = 1024
 formato = "utf-8"
 puerto = 8888
-ip = socket.gethostbyname(socket.gethostname())
+ip = '192.168.80.128'
 direccion = (ip, puerto)
 
 def main():
     dateTimeObj = datetime.now()
-    logging.basicConfig(format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
+    logging.basicConfig(filename=f'Logs/{dateTimeObj.year}-{dateTimeObj.month}-{dateTimeObj.day}-{dateTimeObj.hour}-{dateTimeObj.minute}-{dateTimeObj.second}.log', filemode='w', level=logging.DEBUG)
 
     cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     cliente.connect(direccion)
@@ -81,7 +81,6 @@ def main():
         f"Numero de bytes recibidos fue: {numPaquetes*tamanio}")
 
     cliente.close()
-
 
 if __name__ == "__main__":
     main()
