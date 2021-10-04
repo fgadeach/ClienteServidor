@@ -65,17 +65,16 @@ def main():
     while(not archivoValido):
         archivo = input("Ingrese 1 para el archivo de 100MB o ingrese 2 para el archivo de 250MB:")
         if(int(archivo) == 2):
-            nombreArch = "ArchivosEnvio/250MB.txt"
+            nombreArch = "Envio/250MB.txt"
             tamanioArchivo = os.path.getsize(nombreArch)
             archivoValido = True
         elif(int(archivo) == 1):
-            nombreArch = "ArchivosEnvio/100MB.txt"
+            nombreArch = "Envio/100MB.txt"
             tamanioArchivo = os.path.getsize(nombreArch)
             archivoValido = True
         else:
             print("Archivo Invalido (Inputs debe ser 1 o 2)")
 
-    ## HASHING ##
     BUF_SIZE = 1024
 
     md5 = hashlib.md5()

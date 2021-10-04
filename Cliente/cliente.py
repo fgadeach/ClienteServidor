@@ -11,7 +11,7 @@ direccion = (ip, puerto)
 
 def main():
     dateTimeObj = datetime.now()
-    logging.basicConfig(filename=f'Logs/{dateTimeObj.year}-{dateTimeObj.month}-{dateTimeObj.day}-{dateTimeObj.hour}-{dateTimeObj.minute}-{dateTimeObj.second}.log', filemode='w', level=logging.DEBUG)
+    logging.basicConfig(filename=f'C:/Users/nicol/OneDrive/Documents/GitHub/ClienteServidor/Logs/{dateTimeObj.year}-{dateTimeObj.month}-{dateTimeObj.day}-{dateTimeObj.hour}-{dateTimeObj.minute}-{dateTimeObj.second}.log', filemode='w', level=logging.DEBUG)
 
     cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     cliente.connect(direccion)
@@ -37,7 +37,7 @@ def main():
 
     numPaquetes = 0
     tiempoTranferenciaI = datetime.now()
-    with open(f"ArchivosRecibidos/{ID}-Prueba-{connectionNumber}", "w") as f:
+    with open(f"C:/Users/nicol/OneDrive/Documents/GitHub/ClienteServidor/Cliente/Recibidos/{ID}-Test-{connectionNumber}", "w") as f:
         while True:
             data = cliente.recv(tamanio).decode(formato)
 
@@ -55,7 +55,7 @@ def main():
 
     md5 = hashlib.md5()
 
-    with open(f"Cliente/ArchivosRecibidos/{ID}-Prueba-{connectionNumber}", 'rb') as f:
+    with open(f"C:/Users/nicol/OneDrive/Documents/GitHub/ClienteServidor/Cliente/Recibidos/{ID}-Test-{connectionNumber}", 'rb') as f:
         while True:
             data = f.read(BUF_SIZE)
             if not data:

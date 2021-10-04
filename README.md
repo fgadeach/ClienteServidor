@@ -1,51 +1,25 @@
-# Lab_3_Redes Grupo 11 Seccion 2
+# Proceso de solución de los requerimientos de la practica grupo 5 Seccion1
 
-## Instalacion Servidor
+## Instalación del servidor en la máquina virtual.
 
-1. Instalar Python3.0 en la maquina en caso de que no este ya instalado
-2. Clonar repositorio en la maquina servidor
-3. Ubicarse en la carpeta Servidor/Archivos envio
+1. Se clona el repositorio en la maquina servidor https://github.com/fgadeach/ClienteServidor
+2. Hacer cd en la carpeta Servidor/Envio
+3. Se crean los archivos a enviar con los comandos en ubuntu de la siguiente forma:
 
-```bash
-cd Servidor/ArchivosEnvio
-```
-
-4. Correr los siguientes comandos (Unicamente funcionan en Linux o Mac):
-
-```bash
 dd if=/dev/zero of=100MB.txt count=10000 bs=10000
 dd if=/dev/zero of=250MB.txt count=15812 bs=15812
-```
 
-5. Volver a la carpeta Servidor
+4. Se corre el archivo .py en la ruta del servidor de la siguiente forma:
 
-```bash
-cd ..
-```
-
-6. Correr la aplicacion con el siguiente comando:
-
-```bash
 python3 servidor.py
-```
+7. Se indica el numero de clientes a conectar.
+8. Se indica con 1 o 2 el archivo que se debe enviar.
 
-7. Indicar el numero de clientes que se deben conectar (numero entre 1 y 25)
-8. Indicar el archvo que se desea recibir ("1" Para recibir el archivo de 100MB y "2" Para recibir el archivo de 250MB)
+## Instalacion del Cliente en la otra máquina en la que se va a generar la conexión
 
-## Instalacion Cliente
+1. Se clona el repositorio en la maquina servidor https://github.com/fgadeach/ClienteServidor
+2. Se corre el número de threads necesario basado en el numero de conexiones escogidas.
+3. Se corre el archivo .py en la ruta del servidor de la siguiente forma::
 
-1. Instalar Python3.0 en la maquina en caso de que no este ya instalado
-2. Clonar repositorio en la maquina servidor
-3. Ubicarse en la carpeta Cliente envio
-
-```bash
-cd Cliente
-```
-
-4. Campiar la constante IP en cliente.py a la IP del servidor
-5. Abrir el numero de terminales segun el numero ingresado en el punto 7 del servidor (Puede ser en VSCode)
-6. Correr el siguiente comando en todas las terminales:
-
-```bash
 python3 cliente.py
-```
+
