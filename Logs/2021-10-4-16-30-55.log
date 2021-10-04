@@ -1,0 +1,6 @@
+INFO:root:Se recibio el archivo : Envio/250MB.txt con tamaño de 250019344
+INFO:root:El cliente 3  se encuentra con la direccion: 192.168.80.1 : {62735}
+INFO:root:No se pudo concluir la entrega del archivo
+INFO:root:Tiempo de transferencia : 0:00:24.072840
+INFO:root:Numero de paquetes recibidos fue: 17722
+INFO:root:Numero de bytes recibidos fue: 18147328
