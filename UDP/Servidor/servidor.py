@@ -3,7 +3,6 @@ import threading
 import os
 import logging
 from datetime import datetime
-import hashlib
 
 tamanio = 1024
 formato = "utf-8"
@@ -11,12 +10,12 @@ puerto = 6000
 ip = '192.168.85.128'
 direccion = (ip, puerto)
 
-def manejarCliente(conn, addr, nombreArch, tamanioArchivo, ID, connectionNumber, hashServidor, ip, puerto):
+def manejarCliente(conn, addr, nombreArch, tamanioArchivo, ID, connectionNumber, ip, puerto):
     logging.info(f'Se genero la conexion {ID} desde {ip}:{puerto}')
 
     print(" Conexion del cliente {addr}: ready")
 
-    data = f"{nombreArch}_{tamanioArchivo}_{ID}_{connectionNumber}_{hashServidor}_{ip}_{puerto}"
+    data = f"{nombreArch}_{tamanioArchivo}_{ID}_{connectionNumber}_{ip}_{puerto}"
     conn.send(data.encode(formato))
     mensaje = conn.recv(tamanio).decode(formato)
     print("Respuesta del cliente: " + mensaje)
@@ -74,7 +73,6 @@ def main():
         else:
             print("Archivo Invalido (Inputs debe ser 1 o 2)")
 
-    ## HASHING ##
     BUF_SIZE = 1024
 
     logging.info(f'Nombre del archivo enviado : {nombreArch}')
