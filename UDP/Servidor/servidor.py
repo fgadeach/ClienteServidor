@@ -82,7 +82,6 @@ def main():
 
     servidor = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     servidor.bind(direccion)
-    servidor.listen()
     print("Servidor en standby ....")
 
     threads = []
