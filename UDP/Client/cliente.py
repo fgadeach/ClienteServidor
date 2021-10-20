@@ -6,7 +6,7 @@ import hashlib
 tamanio = 1024
 formato = "utf-8"
 puerto = 6000
-ip = '192.168.80.128'
+ip = '192.168.152.128'
 direccion = (ip, puerto)
 
 def main():
