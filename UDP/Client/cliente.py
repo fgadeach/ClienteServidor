@@ -14,9 +14,12 @@ def main():
     logging.basicConfig(filename=f'Logs/{dateTimeObj.year}-{dateTimeObj.month}-{dateTimeObj.day}-{dateTimeObj.hour}-{dateTimeObj.minute}-{dateTimeObj.second}.log', filemode='w', level=logging.DEBUG)
 
     cliente = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    cliente.connect(direccion)
 
-    data = cliente.recv(tamanio).decode('utf-8')
+    sentBytesCount = cliente.sendto("Example Corporation".encode(), direccion)
+    receivedBytes  = cliente.recvfrom(tamanio)
+    print(receivedBytes[0].decode())
+
+    data = receivedBytes
     item = data.split("_")
     nombreArch = item[0]
     tamanioArchivo = int(item[1])
