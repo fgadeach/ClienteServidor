@@ -90,7 +90,7 @@ def main():
 
     
     while (clientsNumber < connectionNumber):
-        conn, addr = servidor.accept()
+        conn, addr = servidor.recvfrom(1024)
         clientsNumber += 1
         print(f"Conexion del cliente desde {addr[0]}:{addr[1]}")
         thread = threading.Thread(target=manejarCliente, args=(
