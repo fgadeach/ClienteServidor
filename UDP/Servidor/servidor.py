@@ -48,7 +48,7 @@ def manejarCliente(conn, addr, nombreArch, tamanioArchivo, ID, connectionNumber,
 def main():
     dateTimeObj = datetime.now()
     logging.basicConfig(
-        filename=f"ClienteServidor/UDP/Log/{dateTimeObj.year}-{dateTimeObj.month}-{dateTimeObj.day}-{dateTimeObj.hour}-{dateTimeObj.minute}-{dateTimeObj.second}.log", level=logging.INFO)
+        filename=f"Logs/{dateTimeObj.year}-{dateTimeObj.month}-{dateTimeObj.day}-{dateTimeObj.hour}-{dateTimeObj.minute}-{dateTimeObj.second}.log", level=logging.INFO)
 
     numValidoConexiones = False
     while(not numValidoConexiones):
