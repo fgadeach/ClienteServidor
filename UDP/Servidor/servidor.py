@@ -16,8 +16,8 @@ def manejarCliente(conn, addr, nombreArch, tamanioArchivo, ID, connectionNumber,
     print(" Conexion del cliente {addr}: ready")
 
     data = f"{nombreArch}_{tamanioArchivo}_{ID}_{connectionNumber}_{ip}_{puerto}"
-    conn.send(data.encode(formato))
     mensaje = conn.recv(tamanio).decode(formato)
+    conn.sendto(mensaje,addr)
     print("Respuesta del cliente: " + mensaje)
 
     numPaquetesEnviados = 0
@@ -29,8 +29,8 @@ def manejarCliente(conn, addr, nombreArch, tamanioArchivo, ID, connectionNumber,
             if not data:
                 break
 
-            conn.send(data.encode(formato))
             mensaje = conn.recv(tamanio).decode(formato)
+            conn.sendto(mensaje,addr)
             numPaquetesEnviados += 1
     tiempoTranferenciaF = datetime.now()
 
