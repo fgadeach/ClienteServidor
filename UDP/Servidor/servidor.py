@@ -8,7 +8,7 @@ import hashlib
 tamanio = 1024
 formato = "utf-8"
 puerto = 6000
-ip = '192.168.152.128'
+ip = '192.168.85.128'
 direccion = (ip, puerto)
 
 def manejarCliente(conn, addr, nombreArch, tamanioArchivo, ID, connectionNumber, hashServidor, ip, puerto):
