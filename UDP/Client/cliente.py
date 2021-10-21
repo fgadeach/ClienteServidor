@@ -7,7 +7,7 @@ import logging
 if __name__ == '__main__':
     dateTimeObj = datetime.now()
     logging.basicConfig(
-        filename=f"UDP/Client/Logs/{dateTimeObj.year}-{dateTimeObj.month}-{dateTimeObj.day}-{dateTimeObj.hour}-{dateTimeObj.minute}-{dateTimeObj.second}.log", level=logging.INFO)
+        filename=f"Logs/{dateTimeObj.year}-{dateTimeObj.month}-{dateTimeObj.day}-{dateTimeObj.hour}-{dateTimeObj.minute}-{dateTimeObj.second}.log", level=logging.INFO)
 
     cliente = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
@@ -50,7 +50,7 @@ if __name__ == '__main__':
 
     paquetesRecibidos = 0
     tiempoInicial = datetime.now()
-    with open(f"UDP/Client/Logs{numeroClientes}–Prueba-{numeroConexiones}.txt", "w") as f:
+    with open(f"Archivos/{numeroClientes}–Prueba-{numeroConexiones}.txt", "w") as f:
         while True:
             datos, direccion = cliente.recvfrom(1024)
             if(paquetesRecibidos == 0):
@@ -67,10 +67,10 @@ if __name__ == '__main__':
     print('Termina la transferencia')
     tiempoTranferencia = tiempoFinal-tiempoInicial
 
-    tamanioArchivoRecibido = os.path.getsize(f"UDP/Client/Logs{numeroClientes}–Prueba-{numeroConexiones}.txt")
+    tamanioArchivoRecibido = os.path.getsize(f"Archivos/{numeroClientes}–Prueba-{numeroConexiones}.txt")
 
     hash = hashlib.md5()
-    with open(f"UDP/Client/Logs{numeroClientes}–Prueba-{numeroConexiones}.txt", 'rb') as f:
+    with open(f"Archivos/{numeroClientes}–Prueba-{numeroConexiones}.txt", 'rb') as f:
         while True:
             datos = f.read(1024)
             if not datos:
