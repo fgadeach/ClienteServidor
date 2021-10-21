@@ -41,7 +41,7 @@ if __name__ == '__main__':
 
     dateTimeObj = datetime.now()
 
-    logging.basicConfig(filename=f"UDP/Servidor/Logs/{dateTimeObj.year}-{dateTimeObj.month}-{dateTimeObj.day}-{dateTimeObj.hour}-{dateTimeObj.minute}-{dateTimeObj.second}.log", level=logging.INFO)
+    logging.basicConfig(filename=f"Logs/{dateTimeObj.year}-{dateTimeObj.month}-{dateTimeObj.day}-{dateTimeObj.hour}-{dateTimeObj.minute}-{dateTimeObj.second}.log", level=logging.INFO)
 
     ip = '192.168.85.128'
     puerto = 6000
