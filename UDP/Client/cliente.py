@@ -1,73 +1,100 @@
 import socket
-import logging
-from datetime import datetime
+import os
 import hashlib
+from datetime import datetime
+import logging
 
-tamanio = 1024
-formato = "utf-8"
-puerto = 6000
-ip = '192.168.85.128'
-direccion = (ip, puerto)
-
-def main():
+if __name__ == '__main__':
     dateTimeObj = datetime.now()
-    logging.basicConfig(filename=f'Logs/{dateTimeObj.year}-{dateTimeObj.month}-{dateTimeObj.day}-{dateTimeObj.hour}-{dateTimeObj.minute}-{dateTimeObj.second}.log', filemode='w', level=logging.DEBUG)
+    logging.basicConfig(
+        filename=f"Logs/{dateTimeObj.year}-{dateTimeObj.month}-{dateTimeObj.day}-{dateTimeObj.hour}-{dateTimeObj.minute}-{dateTimeObj.second}.log", level=logging.INFO)
 
     cliente = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-    sentBytesCount = cliente.sendto("Example Corporation".encode(), direccion)
-    receivedBytes  = cliente.recvfrom(tamanio)
-    print(receivedBytes[0].decode())
+    ip = ""
+    puerto = 6000
+    direccion = (ip, puerto)
 
-    data = receivedBytes
-    item = data.split("_")
-    nombreArch = item[0]
-    tamanioArchivo = int(item[1])
-    ID = item[2]
-    connectionNumber = item[3]
-    ip = item[4]
-    puerto = item[5]
+    datos = 'Conexión exitosa'
+    datos = datos.encode('utf8')
 
-    logging.info(
-        f"Se recibio el archivo : {nombreArch} con tamaño de {tamanioArchivo}")
+    cliente.sendto(datos, direccion)
 
-    logging.info(
-        f"El cliente {ID}  se encuentra con la direccion: {ip} : {puerto}")
+    datos, direccion = cliente.recvfrom(1024)
+    datos = datos.decode('utf8')
+    objeto = datos.split("_")
 
-    print("\n Datos del archivo recibido")
-    cliente.send("Datos del archivo recibido".encode(formato))
+    numeroClientes = objeto[0]
+    numeroConexiones = objeto[1]
+    nombreArchivo = objeto[2].split("/")[1]
+    tamanioArchivo = objeto[3]
+    hashS = objeto[4]
 
-    numPaquetes = 0
-    tiempoTranferenciaI = datetime.now()
-    with open(f"ArchivosRecibidos/{ID}-Prueba-{connectionNumber}", "w") as f:
+    datos, direccion = cliente.recvfrom(1024)
+    datos = datos.decode('utf8')
+    print(datos)
+
+    print(f'Numero del cliente {numeroClientes} numero de conexiones {numeroConexiones}')
+
+    print(f'nombre del archivo "{nombreArchivo}" tamaño del archivo {tamanioArchivo}')
+
+    print(f'hash servidor: {hashS}')
+
+    logging.info(f'Numero del cliente: {numeroClientes}')
+
+    logging.info(f'Numero de conexiones: {numeroConexiones}')
+
+    logging.info(f'Nombre del archivo: {nombreArchivo}')
+
+    logging.info(f'Tamaño del archivo: {tamanioArchivo}')
+
+    paquetesRecibidos = 0
+    tiempoInicial = datetime.now()
+    with open(f"ArchivosRecibidos/{numeroClientes}–Prueba-{numeroConexiones}.txt", "w") as f:
         while True:
-            data = cliente.recv(tamanio).decode(formato)
-
-            if not data:
+            datos, direccion = cliente.recvfrom(1024)
+            if(paquetesRecibidos == 0):
+                tiempoInicial = datetime.now()
+                print('Empieza la transferencia')
+            if not datos:
                 break
 
-            f.write(data)
-            cliente.send("Archivo recibido".encode(formato))
-            numPaquetes += 1
-    tiempoTranferenciaF = datetime.now()
+            datos = datos.decode('utf8')
+            f.write(datos)
+            paquetesRecibidos += 1
 
-    tiempoTranferencia = tiempoTranferenciaF-tiempoTranferenciaI
-  
-    BUF_SIZE = 1024
+    tiempoFinal = datetime.now()
+    print('Termina la transferencia')
+    tiempoTranferencia = tiempoFinal-tiempoInicial
 
-    with open(f"Cliente/ArchivosRecibidos/{ID}-Prueba-{connectionNumber}", 'rb') as f:
+    tamanioArchivoRecibido = os.path.getsize(f"ArchivosRecibidos/{numeroClientes}–Prueba-{numeroConexiones}.txt")
+
+    hash = hashlib.md5()
+    with open(f"ArchivosRecibidos/{numeroClientes}–Prueba-{numeroConexiones}.txt", 'rb') as f:
         while True:
-            data = f.read(BUF_SIZE)
-            if not data:
+            datos = f.read(1024)
+            if not datos:
                 break
+            hash.update(datos)
 
-    logging.info(f'Tiempo de transferencia : {tiempoTranferencia}')
-    logging.info(
-        f'Numero de paquetes recibidos fue: {numPaquetes}')
-    logging.info(
-        f"Numero de bytes recibidos fue: {numPaquetes*tamanio}")
+    hashC = hash.hexdigest()
 
+    if hashC == hashS:
+        archivoCorrecto = True 
+    else:
+        archivoCorrecto = False
+
+    print(f'valor del hash del cliente: {hashC}')
+
+    datos = f'{numeroClientes}_{archivoCorrecto}'
+    datos = datos.encode('utf8')
+    cliente.sendto(datos, direccion)
     cliente.close()
 
-if __name__ == "__main__":
-    main()
+    logging.info(f'El archivo se recibe correctamente: {archivoCorrecto}')
+
+    logging.info(f'tiempo de transferencia: {tiempoTranferencia}')
+
+    logging.info(f'Numero de paquetes: {paquetesRecibidos}')
+
+    logging.info(f'Numero de bytes: {tamanioArchivoRecibido}')
