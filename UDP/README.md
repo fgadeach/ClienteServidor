@@ -4,10 +4,10 @@
 
 1. Instalar Python3.0 en la maquina en caso de que no este ya instalado
 2. Clonar repositorio en la maquina servidor
-3. Ubicarse en la carpeta Servidor/Archivos envio
+3. Ubicarse en la carpeta Servidor/Archivos
 
 ```bash
-cd Servidor/ArchivosEnvio
+cd Servidor/Archivos
 ```
 
 4. Correr los siguientes comandos (Unicamente funcionan en Linux o Mac):
