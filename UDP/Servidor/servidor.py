@@ -43,7 +43,7 @@ if __name__ == '__main__':
 
     logging.basicConfig(filename=f"Logs/{dateTimeObj.year}-{dateTimeObj.month}-{dateTimeObj.day}-{dateTimeObj.hour}-{dateTimeObj.minute}-{dateTimeObj.second}.log", level=logging.INFO)
 
-    ip = ""
+    ip = '192.168.85.128'
     puerto = 6000
 
     server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

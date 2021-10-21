@@ -11,7 +11,7 @@ if __name__ == '__main__':
 
     cliente = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-    ip = ""
+    ip = '192.168.85.128'
     puerto = 6000
     direccion = (ip, puerto)
 
