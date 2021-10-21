@@ -41,7 +41,7 @@ if __name__ == '__main__':
 
     dateTimeObj = datetime.now()
 
-    logging.basicConfig(filename=f"Logs/{dateTimeObj.year}-{dateTimeObj.month}-{dateTimeObj.day}-{dateTimeObj.hour}-{dateTimeObj.minute}-{dateTimeObj.second}.log", level=logging.INFO)
+    logging.basicConfig(filename=f"UDP/Servidor/Logs/{dateTimeObj.year}-{dateTimeObj.month}-{dateTimeObj.day}-{dateTimeObj.hour}-{dateTimeObj.minute}-{dateTimeObj.second}.log", level=logging.INFO)
 
     ip = '192.168.85.128'
     puerto = 6000
@@ -72,12 +72,12 @@ if __name__ == '__main__':
         archivo = input("Ingrese 1 para el archivo de 100MB o ingrese 2 para el archivo de 250MB:")
         
         if(int(archivo) == 2):
-            nombreArchivo = "ArchivosEnvio/250MB.txt"
+            nombreArchivo = "UDP/Servidor/Archivos/250MB.txt"
             tamanioArchivo = os.path.getsize(nombreArchivo)
             archivoTest = True
 
         elif(int(archivo) == 1):
-            nombreArchivo = "ArchivosEnvio/100MB.txt"
+            nombreArchivo = "UDP/Servidor/Archivos/100MB.txt"
             tamanioArchivo = os.path.getsize(nombreArchivo)
             archivoTest = True
 
