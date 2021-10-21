@@ -72,12 +72,12 @@ if __name__ == '__main__':
         archivo = input("Ingrese 1 para el archivo de 100MB o ingrese 2 para el archivo de 250MB:")
         
         if(int(archivo) == 2):
-            nombreArchivo = "UDP/Servidor/Archivos/250MB.txt"
+            nombreArchivo = "Archivos/250MB.txt"
             tamanioArchivo = os.path.getsize(nombreArchivo)
             archivoTest = True
 
         elif(int(archivo) == 1):
-            nombreArchivo = "UDP/Servidor/Archivos/100MB.txt"
+            nombreArchivo = "Archivos/100MB.txt"
             tamanioArchivo = os.path.getsize(nombreArchivo)
             archivoTest = True
 
