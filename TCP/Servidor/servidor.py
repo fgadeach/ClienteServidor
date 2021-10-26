@@ -8,7 +8,7 @@ tamanio = 1024
 
 formato = "utf-8"
 puerto = 8888
-ip = '192.168.80.128'
+ip = '192.168.0.185'
 direccion = (ip, puerto)
 
 def manejarCliente(conn, addr, nombreArch, tamanioArchivo, ID, connectionNumber, hashServidor, ip, puerto):
